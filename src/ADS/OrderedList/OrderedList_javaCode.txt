@@ -1,0 +1,179 @@
+package ADS.OrderedList;
+
+import java.util.*;
+
+//я сделаю с пустыми узлами
+class Node<T> {
+    public T value;
+    public Node<T> next, prev;
+
+    public Node(T _value) {
+        value = _value;
+        next = null;
+        prev = null;
+    }
+
+    public Node(T _value, Node pr, Node nx) {
+        value = _value;
+        next = nx;
+        prev = pr;
+    }
+
+    public Node() {
+
+    }
+}
+
+public class OrderedList<T> {
+    public Node<T> head, tail;
+    private boolean _ascending;
+
+    public OrderedList(boolean asc) {
+        head = new Node<>();
+        tail = new Node<>();
+        head.next = tail;
+        tail.prev = head;
+        _ascending = asc;
+    }
+
+    public void addInTail(Node node) {
+        tail.prev.next = node;
+        node.prev = tail.prev;
+        node.next = tail;
+        tail.prev = node;
+        node.prev.next = node;
+    }
+
+    public int compare(T v1, T v2) {
+        if ((int) v1 < (int) v2) {
+            return -1;
+        }
+        if ((int) v1 == (int) v2) {
+            return 0;
+        } else {
+            return 1;
+        }
+        // -1 если v1 < v2
+        // 0 если v1 == v2
+        // +1 если v1 > v2
+    }
+
+    public void add(T value) {
+        Node<T> node = head.next;
+
+        if (head.next == tail) {
+            addInTail(new Node(value));
+            return;
+        }
+
+        if (_ascending == true) {
+            //возростающая
+            while (node.next != tail && compare(value, node.value) >= 0) {
+                node = node.next;
+            }
+            if (node.next == tail && compare(value, node.value) >= 0) {
+                addInTail(new Node(value));
+
+            } else {
+                Node newNode = new Node(value);
+                newNode.next = node;
+                newNode.prev = node.prev;
+                newNode.prev.next = newNode;
+                node.prev = newNode;
+            }
+        } else {
+            //убывающая
+            while (node.next != tail && compare(value, node.value) <= 0) {
+                node = node.next;
+            }
+            if (node.next == tail && compare(value, node.value) <= 0) {
+                addInTail(new Node(value));
+            } else {
+                Node newNode = new Node(value);
+                newNode.next = node;
+                newNode.prev = node.prev;
+                newNode.prev.next = newNode;
+                node.prev = newNode;
+            }
+        }
+
+
+        // автоматическая вставка value
+        // в нужную позицию
+    }
+
+    public Node<T> find(T val) {
+        Node<T> node = this.head.next;
+        if (_ascending == true) {
+            while (compare(val, node.value) > 0 && node.next != tail) {
+                node = node.next;
+            }
+
+        } else {
+            while (compare(val, node.value) < 0 && node.next != tail) {
+                node = node.next;
+            }
+        }
+        if (node.value == val) {
+            return node;
+        }
+        return null; // здесь будет ваш код
+    }
+
+    public void delete(T val) {
+        Node node=find(val);
+        if (node!=null){
+
+            node.prev.next=node.next;
+            node.next.prev=node.prev;
+        }
+        // здесь будет ваш код
+    }
+
+    public void printAll() {
+        Node node = this.head;
+        while (node != this.tail) {
+            System.out.println(node.value);
+            node = node.next;
+        }
+        System.out.println(node.value);
+
+    }
+
+    public void clear(boolean asc) {
+        _ascending = asc;
+        this.head.next = this.tail;
+        this.tail.prev = this.head;
+        // здесь будет ваш код
+    }
+
+    public int count() {
+        Node node=head;
+        int count=0;
+        while (node.next!=tail){
+            node=node.next;
+            count++;
+        }
+        return count; // здесь будет ваш код подсчёта количества элементов в списке
+    }
+
+    ArrayList<Node<T>> getAll() // выдать все элементы упорядоченного
+    // списка в виде стандартного списка
+    {
+        ArrayList<Node<T>> r = new ArrayList<Node<T>>();
+        Node<T> node = head;
+        while (node != null) {
+            r.add(node);
+            node = node.next;
+        }
+        return r;
+    }
+
+    public Node<T> getHead() {
+        return head;
+    }
+
+    public Node<T> getTail() {
+        return tail;
+    }
+}
