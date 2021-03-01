@@ -99,6 +99,9 @@ public class OrderedList<T> {
     }
 
     public Node<T> find(T val) {
+        if (this.head==null){
+            return null;
+        }
         Node<T> node = this.head.next;
         if (_ascending == true) {
             while (compare(val, node.value) > 0 && node.next != tail) {
@@ -133,7 +136,7 @@ public class OrderedList<T> {
     public int count() {
         Node node=head;
         int count=0;
-        while (node.next!=tail){
+        while (node!=null && node.next!=tail){
             node=node.next;
             count++;
         }
@@ -144,7 +147,11 @@ public class OrderedList<T> {
     // списка в виде стандартного списка
     {
         ArrayList<Node<T>> r = new ArrayList<Node<T>>();
-        Node<T> node = head.next;
+        Node<T> node = head;
+        if (node==null){
+            return r;
+        }
+        node=node.next;
         while (node != null) {
             r.add(node);
             node = node.next;
