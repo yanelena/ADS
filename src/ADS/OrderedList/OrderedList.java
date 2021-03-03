@@ -41,103 +41,119 @@ public class OrderedList<T> {
     }
 
     public void add(T value) {
-
-
         if (head == null) {
-            addInTail(new Node(value));
+            add_in_tail(new Node(value));
             return;
         }
-        Node<T> node = head.next;
+        Node<T> node = head;
         if (_ascending == true) {
             //возростающая
-
-            while (node.next != tail && compare(value, node.value) >= 0) {
-                node = node.next;
-            }
-            if (node.next == tail && compare(value, node.value) >= 0) {
-                addInTail(new Node(value));
-
-            } else {
-                Node newNode = new Node(value);
-                newNode.next = node;
-                newNode.prev = node.prev;
-                newNode.prev.next = newNode;
-                node.prev = newNode;
-            }
+            add_in_asc(new Node<>(value));
         } else {
             //убывающая
-            while (node.next != tail && compare(value, node.value) <= 0) {
-                node = node.next;
-            }
-            if (node.next == tail && compare(value, node.value) <= 0) {
-                addInTail(new Node(value));
-            } else {
-                Node newNode = new Node(value);
-                newNode.next = node;
-                newNode.prev = node.prev;
-                newNode.prev.next = newNode;
-                node.prev = newNode;
-            }
+            add_in_desc(new Node<>(value));
         }
-        // автоматическая вставка value
-        // в нужную позицию
+        return;
     }
 
-    public void addInTail(Node node) {
-        if (head == null) {
-            head = new Node<>();
-            tail = new Node<>();
-            head.next=tail;
-            tail.prev=head;
+    void add_in_asc(Node<T> item) {
+        Node<T> node = head;
+        //System.out.println(item.value + "  " + node.value + "  " + compare(item.value, node.value));
+        while (node != null && compare(item.value, node.value) >= 0) {
+            node = node.next;
         }
-        tail.prev.next = node;
-        node.prev = tail.prev;
-        node.next = tail;
-        tail.prev = node;
-        node.prev.next = node;
+        if (node == null) {
+            add_in_tail(item);
+            return;
+        }
 
+        item.prev = node.prev;
+        if (head != node) {
+            node.prev.next = item;
+        }else{
+            head = item;
+        }
+        node.prev = item;
+        item.next = node;
+
+    }
+
+    void add_in_desc(Node<T> item) {
+        Node<T> node = head;
+
+        while (node != null && compare(item.value, node.value) <= 0) {
+            node = node.next;
+        }
+
+        if (node == null) {
+            add_in_tail(item);
+            return;
+        }
+        item.prev = node.prev;
+
+        if (head != node) {
+            node.prev.next = item;
+        }else{
+            head = item;
+        }
+        node.prev = item;
+        item.next = node;
+    }
+
+    void add_in_tail(Node item) {
+        if (head == null) {
+            head = item;
+            item.prev = null;
+            item.next = null;
+        } else {
+            tail.next = item;
+            item.prev = tail;
+        }
+        tail = item;
     }
 
     public Node<T> find(T val) {
-        if (this.head==null){
-            return null;
-        }
-        Node<T> node = this.head.next;
-        if (_ascending == true) {
-            while (compare(val, node.value) > 0 && node.next != tail) {
-                node = node.next;
-            }
 
-        } else {
-            while (compare(val, node.value) < 0 && node.next != tail) {
-                node = node.next;
-            }
+        Node<T> node = head;
+        while (node != null && compare(node.value, val) != 0) {
+            node = node.next;
         }
-        if (node.value == val) {
-            return node;
-        }
-        return null;    }
+
+        return node;
+    }
 
     public void delete(T val) {
-        Node node=find(val);
-        if (node!=null){
-
-            node.prev.next=node.next;
-            node.next.prev=node.prev;
+        Node node = find(val);
+        if (node != null) {
+            if (node.prev == null) {
+                head = node.next;
+                node.next.prev = null;
+                return;
+            }
+            if (node.next == null) {
+                node.prev.next = null;
+                tail = node.prev;
+                node.prev = null;
+                return;
+            }
+            node.prev.next = node.next;
+            node.next.prev = node.prev;
+            node.next = null;
+            node.prev = null;
         }
     }
 
     public void clear(boolean asc) {
         _ascending = asc;
-        this.head.next = this.tail;
-        this.tail.prev = this.head;
+        this.head=null;
+        this.tail=null;
     }
 
     public int count() {
-        Node node=head;
-        int count=0;
-        while (node!=null && node.next!=tail){
-            node=node.next;
+        Node node = head;
+        int count = 0;
+        while (node != null) {
+            node = node.next;
             count++;
         }
         return count; // здесь будет ваш код подсчёта количества элементов в списке
@@ -148,11 +164,8 @@ public class OrderedList<T> {
     {
         ArrayList<Node<T>> r = new ArrayList<Node<T>>();
         Node<T> node = head;
-        if (node==null){
-            return r;
-        }
-        node=node.next;
-        while (node != null) {
+        while(node != null)
+        {
             r.add(node);
             node = node.next;
         }
