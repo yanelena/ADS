@@ -70,7 +70,7 @@ public class OrderedList<T> {
         item.prev = node.prev;
         if (head != node) {
             node.prev.next = item;
-        }else{
+        } else {
             head = item;
         }
         node.prev = item;
@@ -93,7 +93,7 @@ public class OrderedList<T> {
 
         if (head != node) {
             node.prev.next = item;
-        }else{
+        } else {
             head = item;
         }
         node.prev = item;
@@ -123,13 +123,21 @@ public class OrderedList<T> {
     }
 
     public void delete(T val) {
-        Node node = find(val);
+        Node<T> node = find(val);
         if (node != null) {
+            //list with one el
+            if (node.prev == null && node.next == null) {
+                head=null;
+                tail=null;
+                return;
+            }
+            //el in the beginning of the list
             if (node.prev == null) {
                 head = node.next;
                 node.next.prev = null;
                 return;
             }
+            //el in the end of list
             if (node.next == null) {
                 node.prev.next = null;
                 tail = node.prev;
@@ -145,8 +153,8 @@ public class OrderedList<T> {
 
     public void clear(boolean asc) {
         _ascending = asc;
-        this.head=null;
-        this.tail=null;
+        this.head = null;
+        this.tail = null;
     }
 
     public int count() {
@@ -156,16 +164,16 @@ public class OrderedList<T> {
             node = node.next;
             count++;
         }
-        return count; // здесь будет ваш код подсчёта количества элементов в списке
+        return count;
     }
 
-    ArrayList<Node<T>> getAll() // выдать все элементы упорядоченного
+    ArrayList<Node<T>> getAll()
+    // выдать все элементы упорядоченного
     // списка в виде стандартного списка
     {
         ArrayList<Node<T>> r = new ArrayList<Node<T>>();
         Node<T> node = head;
-        while(node != null)
-        {
+        while (node != null) {
             r.add(node);
             node = node.next;
         }
