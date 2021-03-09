@@ -30,13 +30,27 @@ public class OrderedList<T> {
     }
 
     public int compare(T v1, T v2) {
-        if ((int) v1 < (int) v2) {
-            return -1;
-        }
-        if ((int) v1 == (int) v2) {
-            return 0;
+        //compare numbers
+        if (v1.getClass() == Integer.class) {
+            if ((int) v1 < (int) v2) {
+                return -1;
+            }
+            if ((int) v1 == (int) v2) {
+                return 0;
+            } else {
+                return 1;
+            }
         } else {
-            return 1;
+            //compare strings
+            int vol = (v1.toString().trim()).compareTo(v2.toString().trim());
+            if (vol == 0) {
+                return 0;
+            }
+            if (vol < 0) {
+                return -1;
+            } else {
+                return 1;
+            }
         }
     }
 
@@ -115,10 +129,23 @@ public class OrderedList<T> {
     public Node<T> find(T val) {
 
         Node<T> node = head;
-        while (node != null && compare(node.value, val) != 0) {
-            node = node.next;
+        if (_ascending == true) {
+            while (node != null && compare(node.value, val) != 0) {
+                System.out.println("---- "+node.value);
+                if (compare(node.value,val)>0 ) {
+                    return null;
+                }
+                node = node.next;
+            }
+        } else {
+            while (node != null && compare(node.value, val) != 0) {
+                System.out.println("---- "+node.value);
+                if (compare(node.value,val)<0 ) {
+                    return null;
+                }
+                node = node.next;
+            }
         }
-
         return node;
     }
 
@@ -127,8 +154,8 @@ public class OrderedList<T> {
         if (node != null) {
             //list with one el
             if (node.prev == null && node.next == null) {
-                head=null;
-                tail=null;
+                head = null;
+                tail = null;
                 return;
             }
             //el in the beginning of the list
