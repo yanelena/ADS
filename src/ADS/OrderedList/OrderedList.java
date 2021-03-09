@@ -1,5 +1,4 @@
 package ADS.OrderedList;
-//ordered list without explicit dummy cell. In the task strict constructor declaration
 
 import java.util.*;
 
