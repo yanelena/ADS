@@ -25,7 +25,6 @@ public class HashTable {
             return hashFun(value);
         } else {
             for (int i = hashFun(value); i < this.size-1; i+=this.step) {
-                System.out.println("-_-_-_"+i);
                 if (slots[i] == null) {
                     return i;
                 }
