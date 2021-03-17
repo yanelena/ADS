@@ -13,27 +13,18 @@ public class HashTable {
     }
 
     public int hashFun(String value) {
-
         // всегда возвращает корректный индекс слота
         //остаток от деления длины строки на длину массива
         return value.length() % this.size;
     }
 
     public int seekSlot(String value) {
-        if (slots[hashFun(value)] == null) {
-            // находит индекс пустого слота для значения, или -1
-
-            return hashFun(value);
-        } else {
-            for (int i = hashFun(value); i < this.size; i += this.step) {
-                if (slots[i] == null) {
-                    return i;
-                }
-            }
-            for (int i = 0; i < this.size ; i ++) {
-                if (slots[i] == null) {
-                    return i;
-                }
+        int index = hashFun(value);
+        for (int i = 0; i < this.size; i++) {
+            if (slots[index] == null) {
+                return index;
+            } else {
+                index = (index + this.step) % this.size;
             }
         }
         return -1;
@@ -47,20 +38,20 @@ public class HashTable {
             slots[index] = value;
             return index;
         }
-
         // записываем значение по хэш-функции
-
         // возвращается индекс слота или -1
         // если из-за коллизий элемент не удаётся разместить
-
     }
 
     public int find(String value) {
         int index = hashFun(value);
-        for (int i = index; i < this.size; i += this.step) {
-            if (slots[i] != null) {
-                if (slots[i].equals(value)) {
-                    return i;
+        for (int i = 0; i < this.size; i++) {
+            if (slots[index] != null) {
+                if (slots[index].equals(value)) {
+                    return index;
+                }
+                else {
+                    index = (index + this.step) % this.size;
                 }
             }
         }
