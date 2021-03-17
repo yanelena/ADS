@@ -39,7 +39,7 @@ public class HashTable {
             return -1;
         } else {
             slots[index] = value;
-            return hashFun(value);
+            return index;
         }
 
         // записываем значение по хэш-функции
@@ -52,7 +52,7 @@ public class HashTable {
     public int find(String value) {
         int index=hashFun(value);
         for (int i=index; i<this.size-1;i+=this.step){
-            if (slots[i]==value) return i;
+            if (slots[i].equals(value)) return i;
         }
             // находит индекс слота со значением, или -1
             return -1;
