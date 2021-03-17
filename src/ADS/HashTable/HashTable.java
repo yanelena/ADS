@@ -22,15 +22,23 @@ public class HashTable {
     public int seekSlot(String value) {
         if (slots[hashFun(value)] == null) {
             // находит индекс пустого слота для значения, или -1
+            System.out.println("val-"+value+", index-"+hashFun(value));
             return hashFun(value);
         } else {
-            for (int i = hashFun(value); i < this.size - 1; i += this.step) {
+            for (int i = hashFun(value); i < this.size; i += this.step) {
                 if (slots[i] == null) {
                     return i;
                 }
             }
-            return -1;
+            for (int i = 0; i < this.size ; i ++) {
+                System.out.println("haha");
+                if (slots[i] == null) {
+                    System.out.println("haha "+i);
+                    return i;
+                }
+            }
         }
+        return -1;
     }
 
     public int put(String value) {
