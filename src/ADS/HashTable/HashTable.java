@@ -52,7 +52,6 @@ public class HashTable {
     public int find(String value) {
         int index = hashFun(value);
         for (int i = index; i < this.size; i += this.step) {
-            System.out.println("00--" + i);
             if (slots[i] != null) {
                 if (slots[i].equals(value)) {
                     return i;
