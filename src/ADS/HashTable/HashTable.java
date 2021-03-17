@@ -24,7 +24,7 @@ public class HashTable {
             // находит индекс пустого слота для значения, или -1
             return hashFun(value);
         } else {
-            for (int i = hashFun(value); i < this.size-1; i+=this.step) {
+            for (int i = hashFun(value); i < this.size - 1; i += this.step) {
                 if (slots[i] == null) {
                     return i;
                 }
@@ -34,7 +34,7 @@ public class HashTable {
     }
 
     public int put(String value) {
-        int index=seekSlot(value);
+        int index = seekSlot(value);
         if (index == -1) {
             return -1;
         } else {
@@ -50,12 +50,17 @@ public class HashTable {
     }
 
     public int find(String value) {
-        int index=hashFun(value);
-        for (int i=index; i<this.size-1;i+=this.step){
-            if (slots[i].equals(value)) return i;
+        int index = hashFun(value);
+        for (int i = index; i < this.size; i += this.step) {
+            System.out.println("00--" + i);
+            if (slots[i] != null) {
+                if (slots[i].equals(value)) {
+                    return i;
+                }
+            }
         }
-            // находит индекс слота со значением, или -1
-            return -1;
+        // находит индекс слота со значением, или -1
+        return -1;
 
     }
 }
