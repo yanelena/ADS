@@ -22,7 +22,7 @@ public class HashTable {
     public int seekSlot(String value) {
         if (slots[hashFun(value)] == null) {
             // находит индекс пустого слота для значения, или -1
-            System.out.println("val-"+value+", index-"+hashFun(value));
+
             return hashFun(value);
         } else {
             for (int i = hashFun(value); i < this.size; i += this.step) {
@@ -31,9 +31,7 @@ public class HashTable {
                 }
             }
             for (int i = 0; i < this.size ; i ++) {
-                System.out.println("haha");
                 if (slots[i] == null) {
-                    System.out.println("haha "+i);
                     return i;
                 }
             }
