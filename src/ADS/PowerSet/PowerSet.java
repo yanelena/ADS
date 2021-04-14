@@ -105,15 +105,5 @@ public class PowerSet {
         return flag;
     }
 
-    public static void main(String[] args) {
-        Hashtable hashtable = new Hashtable();
-        hashtable.put("one", 1);
-        hashtable.put("two", 2);
-        Hashtable hashtable1 = (Hashtable) hashtable.clone();
-        hashtable.put("three", 3);
-        System.out.println(hashtable.size());
-        System.out.println(hashtable1.size());
 
-
-    }
 }
