@@ -76,16 +76,10 @@ public class PowerSet {
     public PowerSet difference(PowerSet set2) {
         // разница текущего множества и set2
         PowerSet set3 = new PowerSet();
-
-
-        for (String element : set2.ht.values()) {
-            if (!this.ht.contains(element))
-                set3.put(element);
-        }
-
         for (String element : this.ht.values()) {
             if (!set2.ht.contains(element))
-                set3.put(element);
+              set3.put(element);
+
         }
 
         return set3;
