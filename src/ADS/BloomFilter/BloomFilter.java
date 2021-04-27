@@ -2,11 +2,11 @@ package ADS.BloomFilter;
 
 public class BloomFilter {
     public int filter_len;
-    byte[] bits;
+
 
     public BloomFilter(int f_len) {
-        filter_len = f_len;
-        bits = new byte[filter_len];
+        filter_len = f_len - 2;
+
         // создаём битовый массив длиной f_len ...
     }
 
@@ -19,7 +19,7 @@ public class BloomFilter {
             result *= randomNum;
             int code = (int) str1.charAt(i);
             result += code;
-            result %= filter_len;
+            result %= 30;
 
         }
         // реализация ...
@@ -34,7 +34,7 @@ public class BloomFilter {
             result *= randomNum;
             int code = (int) str1.charAt(i);
             result += code;
-            result %= filter_len;
+            result %= 30;
 
         }
         // реализация ...
@@ -42,16 +42,22 @@ public class BloomFilter {
     }
 
     public void add(String str1) {
-        bits[hash1(str1)] = 1;
-        bits[hash2(str1)] = 1;
+        int frAdd = (int) Math.pow(2, 30 - hash1(str1));
+        int scAdd = (int) Math.pow(2, 30 - hash2(str1));
+        filter_len = (int) Math.pow(2, filter_len);
+        if (frAdd == scAdd) {
+            filter_len += frAdd;
+        } else {
+            filter_len += frAdd + scAdd;
+        }
         // добавляем строку str1 в фильтр
     }
 
     public boolean isValue(String str1) {
-        if (bits[hash1(str1)] == 1 && bits[hash2(str1)] == 1) {
+        String s = Integer.toBinaryString(filter_len);
+        if (s.charAt(hash1(str1)) == '1' && s.charAt(hash2(str1)) == '1') {
             return true;
         }
-        // проверка, имеется ли строка str1 в фильтре
         return false;
     }
 }
