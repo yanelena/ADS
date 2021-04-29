@@ -5,7 +5,7 @@ public class BloomFilter {
 
 
     public BloomFilter(int f_len) {
-        filter_len = f_len - 2;
+        filter_len = (int) Math.pow(2, (f_len - 2));
 
         // создаём битовый массив длиной f_len ...
     }
@@ -42,13 +42,21 @@ public class BloomFilter {
     }
 
     public void add(String str1) {
+        String s = Integer.toBinaryString(filter_len);
         int frAdd = (int) Math.pow(2, 30 - hash1(str1));
         int scAdd = (int) Math.pow(2, 30 - hash2(str1));
-        filter_len = (int) Math.pow(2, filter_len);
-        if (frAdd == scAdd) {
+        if (s.charAt(hash1(str1)) == '0' && s.charAt(hash2(str1)) == '0') {
+            if (frAdd == scAdd) {
+                filter_len += frAdd;
+            } else {
+                filter_len += frAdd + scAdd;
+            }
+        }
+        if (s.charAt(hash1(str1)) == '0' && s.charAt(hash2(str1)) != '0') {
             filter_len += frAdd;
-        } else {
-            filter_len += frAdd + scAdd;
+        }
+        if (s.charAt(hash1(str1)) != '0' && s.charAt(hash2(str1)) == '0') {
+            filter_len += scAdd;
         }
         // добавляем строку str1 в фильтр
     }
